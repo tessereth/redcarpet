@@ -7,11 +7,16 @@ require 'bluecloth'
 require 'kramdown'
 
 markdown = File.read(File.join(File.dirname(__FILE__), "fixtures/benchmark.md"))
+reused = Redcarpet::Markdown.new(Redcarpet::Render::HTML)
 
 # Let's bench!
 Benchmark.ips do |bench|
   bench.report("Redcarpet") do
     Redcarpet::Markdown.new(Redcarpet::Render::HTML).render(markdown)
+  end
+
+  bench.report("Redcarpet reused") do
+    reused.render(markdown)
   end
 
   bench.report("BlueCloth") do
